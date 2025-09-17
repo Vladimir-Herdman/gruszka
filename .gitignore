@@ -1,0 +1,43 @@
+# React ignores
+/.pnp
+.pnp.js
+/coverage
+/build
+/dist
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Main Project
+.angular/cache/
+coverage/
+dist/
+hooks/
+log.txt
+*.log
+node_modules/
+npm-debug.log*
+platforms/
+temp/
+tmp/
+www/
+.env
+
+# Local Machines
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+UserInterfaceState.xcuserstate
+.vscode/
+.idea/
+.venv/
+__pycache__/
+
+# Firebase
+.firebase
+*-debug.log
+.runtimeconfig.json
