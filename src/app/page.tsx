@@ -5,6 +5,15 @@ export default function Home() {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
+        <div className={styles.TopBar}>
+          <ul className={styles.TopBar_ul}>
+            <li><a href="news.asp">Hello</a></li>
+            <li><a href="news.asp">Gruzska</a></li>
+            <li><a href="contact.asp">Favorites</a></li>
+            <li><a href="about.asp">Login</a></li>
+          </ul>
+        </div>
+
         <Image
           className={styles.logo}
           src="/next.svg"
