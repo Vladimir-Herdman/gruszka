@@ -1,23 +1,57 @@
-import Image from "next/image";
 import styles from "./page.module.css";
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <div className={styles.TopBar}>
-          <ul className={styles.TopBar_ul}>
-            <span style={{display:'flex', flexDirection:'row'}}>
-              <li><a href="news.asp">Hello</a></li>
-              <li><a href="news.asp" style={{fontSize: 24}}>Gruzska</a></li>
-            </span>
-            <span style={{display:'flex', flexDirection:'row', marginLeft:'auto'}}>
-              <li><a href="contact.asp">Favorites</a></li>
-              <li><a href="about.asp">Login</a></li>
-            </span>
-          </ul>
+    <>
+      {/* ----------TOP BAR---------- */}
+      <div className={styles.topBar}>
+        <div className={styles.logoWrapper}>
+          <div className={styles.logoBase}></div>
+          <div className={styles.logoFill}></div>
         </div>
-      </main>
-    </div>
+
+        <ul className={styles.topBarLinks}>
+          <li><a href="#">Favorites</a></li>
+          <li><a href="#">Login</a></li>
+        </ul>
+      </div>
+
+      {/* ----------SEARCH SECTION---------- */}
+      <div className={styles.searchSection}>
+        <div className={styles.backgroundImage}></div>
+        <div className={styles.searchContainer}>
+          <div className={styles.searchBox}>
+            <input
+              type="text"
+              placeholder="Search for produce..."
+              className={styles.searchInput}
+            />
+            <button className={styles.searchButton}>Search</button>
+          </div>
+        </div>
+      </div>
+
+      {/* ----------RESULTS SECTION---------- */}
+      <div className={styles.resultsSection}>
+        <div className={styles.resultsContainer}>
+          hello<br/>
+          gello<br/>
+          jello<br/>
+          kello<br/>
+          lello<br/>
+          mello<br/>
+          pello<br/>
+          qello<br/>
+          rello<br/>
+          vello<br/>
+          zello<br/>
+          bello<br/>
+          cello<br/>
+        </div>
+      </div>
+
+    
+
+    </>
   );
 }
