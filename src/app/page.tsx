@@ -9,7 +9,7 @@ export default function Home() {
           <ul className={styles.TopBar_ul}>
             <span style={{display:'flex', flexDirection:'row'}}>
               <li><a href="news.asp">Hello</a></li>
-              <li><a href="news.asp">Gruzska</a></li>
+              <li><a href="news.asp" style={{fontSize: 24}}>Gruzska</a></li>
             </span>
             <span style={{display:'flex', flexDirection:'row', marginLeft:'auto'}}>
               <li><a href="contact.asp">Favorites</a></li>
