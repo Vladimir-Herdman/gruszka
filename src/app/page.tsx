@@ -1,57 +1,162 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import styles from "./page.module.css";
 
 export default function Home() {
+  const [results, setResults] = useState<Result[]>([]);
+  const [search, setSearch] = useState("");
+
+  const handleSearch = (text: string) => {
+    if (text === "") {return;}
+    setSearch(text);
+
+    //TODO:
+    //update once we have some API form to return data, so call API here to
+    //get results array instead of just a single test result here
+    const tempResult: Result = {
+      storeName: text,
+      loc: { lat: parseFloat((Math.random() * 90).toFixed(3)), long: parseFloat((Math.random() * 180).toFixed(3)) },
+      distance: parseFloat((Math.random() * 14).toFixed(0)),
+      price: parseFloat((Math.random() * 20).toFixed(2)),
+    };
+    let currentResults;//[...results.slice(), tempResult];
+    if (results[results.length - 1]?.storeName === tempResult.storeName) {
+      currentResults = [...results.slice(), tempResult];
+    } else {
+      currentResults = [tempResult];
+    }
+
+    //TODO: Insert better sorting based off customer choices with price and distance equations
+    console.log(tempResult);
+    currentResults.sort((a, b) => (a.distance || 0) - (b.distance || 0))
+    setResults(currentResults);
+  };
+
   return (
     <>
-      {/* ----------TOP BAR---------- */}
-      <div className={styles.topBar}>
-        <div className={styles.logoWrapper}>
-          <div className={styles.logoBase}></div>
-          <div className={styles.logoFill}></div>
-        </div>
-
-        <ul className={styles.topBarLinks}>
-          <li><a href="#">Favorites</a></li>
-          <li><a href="#">Login</a></li>
-        </ul>
-      </div>
+      <TopBar />
 
       {/* ----------SEARCH SECTION---------- */}
       <div className={styles.searchSection}>
         <div className={styles.backgroundImage}></div>
         <div className={styles.searchContainer}>
-          <div className={styles.searchBox}>
-            <input
-              type="text"
-              placeholder="Search for produce..."
-              className={styles.searchInput}
-            />
-            <button className={styles.searchButton}>Search</button>
-          </div>
+            <SearchBar onSearchTextEntered={handleSearch} />
         </div>
       </div>
 
       {/* ----------RESULTS SECTION---------- */}
       <div className={styles.resultsSection}>
-        <div className={styles.resultsContainer}>
-          hello<br/>
-          gello<br/>
-          jello<br/>
-          kello<br/>
-          lello<br/>
-          mello<br/>
-          pello<br/>
-          qello<br/>
-          rello<br/>
-          vello<br/>
-          zello<br/>
-          bello<br/>
-          cello<br/>
-        </div>
+        <ResultContainerProps results={results} search={search} />
+      </div>
+    </>
+  );
+}
+
+function TopBar() {
+  return (
+    <div className={styles.topBar}>
+      <div className={styles.logoWrapper}>
+        <div className={styles.logoBase}></div>
+        <div className={styles.logoFill}></div>
       </div>
 
-    
+      <ul className={styles.topBarLinks}>
+        <li><a href="#">Favorites</a></li>
+        <li><a href="#">Login</a></li>
+      </ul>
+    </div>
+  );
+}
 
+type SearchBarProps = {
+  onSearchTextEntered: (val: string) => void;
+};
+
+function SearchBar({onSearchTextEntered}: SearchBarProps) {
+  const [inputValue, setInputValue] = useState("");
+
+  return (
+    <div className={styles.searchBox}>
+      <input
+        type="text"
+        placeholder="Search for produce..."
+        className={styles.searchInput}
+        onKeyDown={(e) => e.key === "Enter" && onSearchTextEntered(inputValue)}
+        onChange={(e) => setInputValue(e.target.value)}
+      />
+      <button className={styles.searchButton} onClick={() => onSearchTextEntered(inputValue)}>Search</button>
+    </div>
+  );
+}
+
+type Result = {
+  storeName: string;
+  loc: {lat: number, long: number};
+  price?: number;
+  distance?: number;
+  websiteURL?: string;
+};
+type ResultProps = {
+  result: Result;
+  className: string;
+}
+
+type ResultContainerProps = {
+  results: Result[];
+  search: string;
+};
+
+function ResultContainerProps({results, search}: ResultContainerProps) {
+  const [showHeading, setShowHeading] = useState(false);
+
+  useEffect(() => { if (search !== "") {setShowHeading(true);}}, [search]);
+
+  return (
+    <>
+      <div className={styles.resultsContainer}>
+        <h2 className={styles.searchTerm + " " + (showHeading ? styles.show : "")}>Search Results for: {search}</h2>
+        {
+          results.map((result, index) => 
+            <Result result={result} key={index} className={showHeading ? styles.show : ""} />
+          )
+        }
+      </div>
     </>
+  );
+}
+
+function Result({result, className}: ResultProps) {
+  //TODO: insert functionality here for Directions and OrderNow clicks such as map and opening website for store
+  function onDirectionsClicked() {
+    console.log(`Directions button clicked for storeName:${result.storeName} with price:${result.price}`);
+  }
+  function onOrderNowClicked() {
+    console.log(`Order now button clicked for storeName:${result.storeName} with price:${result.price}`);
+  }
+
+  if (result.distance && result.distance === 0) {result.distance = undefined;}
+
+  return (
+    <div className={styles.result + " " + className}>
+      <h3 className={styles.resultStoreName}>{result.storeName}</h3>
+      <p
+        className={styles.resultDistance}
+        style={result.distance ? {} : {opacity:0}}
+      >
+        {result.distance ? result.distance + " miles" : "NULL"}
+      </p>
+      {result.price && <h2 className={styles.resultPrice}>${result.price}</h2>}
+      <button
+        className={styles.resultRoundButton}
+        style={{backgroundColor:'darkgray'}}
+        onClick={onDirectionsClicked}>Directions
+      </button>
+      <button
+        className={styles.resultRoundButton}
+        style={{right:15, backgroundColor:'var(--primary-color)'}}
+        onClick={onOrderNowClicked}>Order Now
+      </button>
+    </div>
   );
 }
