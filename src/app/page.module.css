@@ -79,11 +79,10 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('/ProduceBackground.png');
+  background-image: url('/SearchBackground.png');
   background-size: cover;
   background-position: center;
   /*background-attachment: fixed;  not sure if I like this, someone else can look at it*/
-  filter: brightness(50%) contrast(1.3);
   z-index: 1;
 }
 
