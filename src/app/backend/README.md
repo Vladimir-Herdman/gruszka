@@ -35,5 +35,5 @@ Now, set up the Python environment and install the necessary libraries for the b
   With the virtual environment activated, install the required packages using pip.
 
   ```bash
-  pip install fatsecret dotenv
+  pip install fatsecret dotenv fastapi
   ```
