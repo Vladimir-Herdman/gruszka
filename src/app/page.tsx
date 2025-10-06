@@ -1,11 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import styles from "./page.module.css";
+
+//components
+import LoginPopup from "@/_components/loginPopup";
 
 export default function Home() {
   const [results, setResults] = useState<Result[]>([]);
   const [search, setSearch] = useState("");
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
 
   const handleSearch = (text: string) => {
     if (text === "") {return;}
@@ -35,7 +39,7 @@ export default function Home() {
 
   return (
     <>
-      <TopBar />
+      <TopBar setShowLoginPopup={setShowLoginPopup}/>
 
       {/* ----------SEARCH SECTION---------- */}
       <div className={styles.searchSection}>
@@ -47,13 +51,19 @@ export default function Home() {
 
       {/* ----------RESULTS SECTION---------- */}
       <div className={styles.resultsSection}>
-        <ResultContainerProps results={results} search={search} />
+        <ResultContainer results={results} search={search} />
       </div>
+
+      {/* ----------POPUPS SECTION---------- */}
+      {showLoginPopup && <LoginPopup setShowLoginPopup={setShowLoginPopup}/>} {/*TODO: make fade in out*/}
     </>
   );
 }
 
-function TopBar() {
+type TopBarProps = {
+  setShowLoginPopup: Dispatch<SetStateAction<boolean>>
+};
+function TopBar({setShowLoginPopup}: TopBarProps) {
   return (
     <div className={styles.topBar}>
       <div className={styles.logoWrapper}>
@@ -63,7 +73,7 @@ function TopBar() {
 
       <ul className={styles.topBarLinks}>
         <li><a href="#">Favorites</a></li>
-        <li><a href="#">Login</a></li>
+        <li><a href="#" onClick={() => setShowLoginPopup(true)}>Login</a></li>
       </ul>
     </div>
   );
@@ -107,10 +117,10 @@ type ResultContainerProps = {
   search: string;
 };
 
-function ResultContainerProps({results, search}: ResultContainerProps) {
+function ResultContainer({results, search}: ResultContainerProps) {
   const [showHeading, setShowHeading] = useState(false);
 
-  useEffect(() => { if (search !== "") {setShowHeading(true);}}, [search]);
+  useEffect(() => { search !== "" && setShowHeading(true);}, [search]);
 
   return (
     <>
@@ -147,14 +157,14 @@ function Result({result, className}: ResultProps) {
         {result.distance ? result.distance + " miles" : "NULL"}
       </p>
       {result.price && <h2 className={styles.resultPrice}>${result.price}</h2>}
-      <button
+      <button //Directions
         className={styles.resultRoundButton}
-        style={{backgroundColor:'darkgray'}}
+        style={{backgroundColor:"darkgray"}}
         onClick={onDirectionsClicked}>Directions
       </button>
-      <button
+      <button //Order Now
         className={styles.resultRoundButton}
-        style={{right:15, backgroundColor:'var(--primary-color)'}}
+        style={{right:15, backgroundColor:"var(--primary-color)"}}
         onClick={onOrderNowClicked}>Order Now
       </button>
     </div>
