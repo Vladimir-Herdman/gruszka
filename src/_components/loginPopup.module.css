@@ -40,10 +40,14 @@
   align-content: center;
   text-align: center;
   cursor: pointer;
+  transition: all ease 0.2s;
 }
 .exitButton::after {
   content: "X";
   font-weight: bold;
+}
+.exitButton:hover {
+  transform: translate(-40%, -40%) scale(1.04);
 }
 
 .inputRow {
@@ -104,9 +108,17 @@
   border-radius: 7px;
   border: solid black 1px;
   cursor: pointer;
-  transition: all ease 1s, filter ease 0.1s;
+  transition: all ease 0.1s;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 .button:hover {
   filter: invert(1);
   transform: scale(1.03);
+}
+.button:hover svg {
+  filter: invert(1);
 }
