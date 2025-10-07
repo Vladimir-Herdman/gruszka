@@ -12,7 +12,6 @@ export default function LoginPopup({setShowLoginPopup}: LoginPopupProps) {
   useEffect(() => {
     const handleEscapePressed = (e: KeyboardEvent) => {e.key === "Escape" && handleExit();};
     window.addEventListener("keydown", handleEscapePressed);
-
     return () => {window.removeEventListener("keydown", handleEscapePressed);};
   }, []);
 
@@ -23,6 +22,15 @@ export default function LoginPopup({setShowLoginPopup}: LoginPopupProps) {
           <div className={styles.exitButton} onClick={handleExit}></div>
           <InputRow title="Email" placeholder="example@email.com"/>
           <InputRow title="Password"/>
+          <div className={styles.buttonSection}>
+            <button className={styles.button} onClick={() => {console.log("apple")}}>Login</button>
+            <button className={styles.button}>Create Account</button>
+            <p className={styles.or}>or</p>
+            <p style={{textAlign:'center', fontSize:'0.9rem'}}>
+              By continuing, you agree to the <u>Terms of Sale</u>, <u>Terms of Service</u>, and <u>Privacy Policy</u>.
+            </p>
+            <button className={styles.button}><b>Continue with Google</b></button>
+          </div>
         </div>
       </div>
     </>
