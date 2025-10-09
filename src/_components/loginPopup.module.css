@@ -7,6 +7,11 @@
   left: 50%;
   z-index: 1000;
   transform: translate(-50%, -50%);
+  animation: 0.3s ease-in 0s 1 fade-in;
+}
+@keyframes fade-in {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
 }
 
 .loginContainer {
@@ -51,6 +56,7 @@
 }
 
 .inputRow {
+  position: relative;
   width: 90%;
   display: flex;
   flex-direction: row;
@@ -62,6 +68,18 @@
   border: none;
   border-bottom: solid black 1px;
   outline: none;
+}
+
+.passwordEye {
+  height: 150%;
+  width: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 0;
+  margin: 0;
+  transform: translateY(-25%);
+  cursor: pointer;
 }
 
 .buttonSection {

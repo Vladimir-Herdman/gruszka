@@ -10,6 +10,7 @@ export default function Home() {
   const [results, setResults] = useState<Result[]>([]);
   const [search, setSearch] = useState("");
   const [showLoginPopup, setShowLoginPopup] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const handleSearch = (text: string) => {
     if (text === "") {return;}
@@ -39,7 +40,7 @@ export default function Home() {
 
   return (
     <>
-      <TopBar setShowLoginPopup={setShowLoginPopup}/>
+      <TopBar setShowLoginPopup={setShowLoginPopup} text={loggedIn ? "Logged In" : "Login"}/>
 
       {/* ----------SEARCH SECTION---------- */}
       <div className={styles.searchSection}>
@@ -55,15 +56,16 @@ export default function Home() {
       </div>
 
       {/* ----------POPUPS SECTION---------- */}
-      {showLoginPopup && <LoginPopup setShowLoginPopup={setShowLoginPopup}/>} {/*TODO: make fade in out*/}
+      {showLoginPopup && <LoginPopup setShowLoginPopup={setShowLoginPopup} setLoggedIn={setLoggedIn} />} {/*TODO: make fade in out*/}
     </>
   );
 }
 
 type TopBarProps = {
-  setShowLoginPopup: Dispatch<SetStateAction<boolean>>
+  setShowLoginPopup: Dispatch<SetStateAction<boolean>>;
+  text: string;
 };
-function TopBar({setShowLoginPopup}: TopBarProps) {
+function TopBar({setShowLoginPopup, text}: TopBarProps) {
   return (
     <div className={styles.topBar}>
       <div className={styles.logoWrapper}>
@@ -73,7 +75,7 @@ function TopBar({setShowLoginPopup}: TopBarProps) {
 
       <ul className={styles.topBarLinks}>
         <li><a href="#">Favorites</a></li>
-        <li><a href="#" onClick={() => setShowLoginPopup(true)}>Login</a></li>
+        <li><a href="#" onClick={() => setShowLoginPopup(true)}>{text}</a></li>
       </ul>
     </div>
   );
