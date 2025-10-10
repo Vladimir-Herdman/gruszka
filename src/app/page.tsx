@@ -5,6 +5,7 @@ import styles from "./page.module.css";
 
 //components
 import LoginPopup from "@/_components/loginPopup";
+import FavoritesPopup from "@/_components/favoritesPopup";
 
 export default function Home() {
   const [results, setResults] = useState<Result[]>([]);
@@ -48,6 +49,8 @@ export default function Home() {
             <SearchBar onSearchTextEntered={handleSearch} />
         </div>
       </div>
+
+      <FavoritesPopup /> {/* MACADEN ADDED REMOVE LATER */}
 
       {/* ----------RESULTS SECTION---------- */}
       <div className={styles.resultsSection}>

@@ -1,0 +1,12 @@
+.favoriteContainer{
+    position: fixed;
+    right: 0;
+    top: 65;
+    width: 325px;
+    height: 500px;
+    background: white;
+    border: solid black 5px;
+    border-radius: 20px;
+    z-index: 20;
+}
+
