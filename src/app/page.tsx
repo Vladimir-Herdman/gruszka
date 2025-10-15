@@ -13,6 +13,7 @@ export default function Home() {
   const [results, setResults] = useState<ResultType[]>([]);
   const [search, setSearch] = useState("");
   const [showLoginPopup, setShowLoginPopup] = useState(false);
+  const [showFavoritesPopup, setShowFavoritesPopup] = useState(false);
 
   const handleSearch = (text: string) => {
     if (text === "") {return;}
@@ -42,7 +43,7 @@ export default function Home() {
 
   return (
     <>
-      <TopBar setShowLoginPopup={setShowLoginPopup}/>
+      <TopBar setShowLoginPopup={setShowLoginPopup} setFavoritesPopup={setShowFavoritesPopup}/>
 
       {/* ----------SEARCH SECTION---------- */}
       <div className={styles.searchSection}>
@@ -52,8 +53,6 @@ export default function Home() {
         </div>
       </div>
 
-      <FavoritesPopup /> {/* MACADEN ADDED REMOVE LATER */}
-
       {/* ----------RESULTS SECTION---------- */}
       <div className={styles.resultsSection}>
         <ResultContainer results={results} search={search} />
@@ -61,14 +60,17 @@ export default function Home() {
 
       {/* ----------POPUPS SECTION---------- */}
       {showLoginPopup && <LoginPopup setShowLoginPopup={setShowLoginPopup}/>} {/*TODO: make fade in out*/}
+      {showFavoritesPopup && <FavoritesPopup setShowFavoritesPopup={setShowFavoritesPopup}/>}
+
     </>
   );
 }
 
 type TopBarProps = {
   setShowLoginPopup: Dispatch<SetStateAction<boolean>>
+  setFavoritesPopup: Dispatch<SetStateAction<boolean>>
 };
-function TopBar({setShowLoginPopup}: TopBarProps) {
+function TopBar({setShowLoginPopup, setFavoritesPopup}: TopBarProps) {
   return (
     <div className={styles.topBar}>
       <div className={styles.logoWrapper}>
@@ -77,7 +79,7 @@ function TopBar({setShowLoginPopup}: TopBarProps) {
       </div>
 
       <ul className={styles.topBarLinks}>
-        <li><a href="#">Favorites</a></li>
+        <li><a href="#" onClick={() => setFavoritesPopup(true)}>Favorites</a></li>
         <li><a href="#" onClick={() => setShowLoginPopup(true)}>Login</a></li>
       </ul>
     </div>
