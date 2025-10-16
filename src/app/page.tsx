@@ -139,6 +139,11 @@ function ResultContainer({results, search}: ResultContainerProps) {
 }
 
 function Result({result, className}: ResultProps) {
+
+  // const res = await fetch("127.0.0.1:8000/food/chicken");
+  // const data = await res.json();
+  // console.log(data.dumps(data));
+
   //TODO: insert functionality here for Directions and OrderNow clicks such as map and opening website for store
   function onDirectionsClicked() {
     console.log(`Directions button clicked for storeName:${result.storeName} with price:${result.price}`);
