@@ -2,6 +2,7 @@ from fatsecret import Fatsecret
 import json
 from dotenv import load_dotenv
 import os
+from fastapi import FastAPI
 
 
 load_dotenv()
@@ -11,8 +12,10 @@ consumerSecret = os.environ.get('consumerSecret')
 
 fs = Fatsecret(consumer_key=consumerKey, consumer_secret=consumerSecret)
 
-foods = fs.foods_search("Chicken")
+app = FastAPI()
 
-json = json.dumps(foods)
+@app.get("/food/{query}")
+async def search(query: str):
+    foods = fs.foods_search(query)
 
-print(json)
+    return foods
