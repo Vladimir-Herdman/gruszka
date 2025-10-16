@@ -21,7 +21,6 @@ function favoritesPopup({setShowFavoritesPopup}: FavoritesPopupProps) {
   return (
     <div className={styles.favoriteContainer}>
       <div className={styles.scrollingList}>
-        {/* TODO: FIX HOW IT APPEARS, THE WIDTH NEEDS TO BE SET TO 100% BUT HOW DOES THE NORMAL ONES LOOK FINE */}
         {/* TODO: ADD FAVORITE BUTTON TO RESULT ITEMS */}
         {/* TODO: MAKE RESULTS APPEAR IN FAVORITES POPUP WHEN CLICKING FAVORITE BUTTON */}
         {<Result result={tempResult} key={0} showHeadingValue={true} />}
