@@ -35,5 +35,11 @@ Now, set up the Python environment and install the necessary libraries for the b
   With the virtual environment activated, install the required packages using pip.
 
   ```bash
-  pip install fatsecret python-dotenv fastapi rauth os json uvicorn
+  pip install fatsecret python-dotenv fastapi rauth os json uvicorn "fastapi[standard]"
+  ```
+
+5. **Run the backend:**
+  With the environment being run,  use the following command
+  ```bash
+  fastapi dev main.py
   ```
