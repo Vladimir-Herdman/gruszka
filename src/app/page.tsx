@@ -5,8 +5,17 @@ import styles from "./page.module.css";
 
 //components
 import LoginPopup from "@/_components/loginPopup";
+import { TelemetryPlugin } from "next/dist/build/webpack/plugins/telemetry-plugin/telemetry-plugin";
+  const foodItem = [
+    {
+      name: "",
+      data: [],
+      price: 0,
+    },
+  ];
 
 export default function Home() {
+
   const [results, setResults] = useState<Result[]>([]);
   const [search, setSearch] = useState("");
   const [showLoginPopup, setShowLoginPopup] = useState(false);
@@ -137,12 +146,35 @@ function ResultContainer({results, search}: ResultContainerProps) {
     </>
   );
 }
-
 function Result({result, className}: ResultProps) {
 
-  // const res = await fetch("127.0.0.1:8000/food/chicken");
-  // const data = await res.json();
-  // console.log(data.dumps(data));
+  console.log("run");
+
+  const help = async () => {
+    console.log("Help");
+    try{
+      const res = await fetch("http://127.0.0.1:8000/food/chicken");
+      const data = await res.json();
+      console.log(data);  
+      return await data;
+    } catch(e){
+      return [];
+    }
+  };
+let food;
+
+  let data = help().then((data) => {
+    console.log(data[0].food_description);
+    food = data[0].food_description;
+    let name = data[0].food_name;
+    let foo = data[0].food_description;
+    foodItem.push({name:name, data: foo, price: 0});
+    console.log(foodItem);
+  });
+  // let food = data[0].food_description;
+  // console.log(food);
+  // data;
+  // console.log(data.food_description);
 
   //TODO: insert functionality here for Directions and OrderNow clicks such as map and opening website for store
   function onDirectionsClicked() {
