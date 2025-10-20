@@ -26,10 +26,12 @@
   text-decoration: none;
   font-weight: 500;
   padding: 0.5rem 1rem;
+  border-radius: 10px;
+  transition: all 0.7s;
 }
 
 .topBarLinks li a:hover {
-  
+  backdrop-filter: brightness(0.9);
 }
 
 .logoWrapper {
