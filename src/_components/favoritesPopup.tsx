@@ -1,4 +1,4 @@
-import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 import styles from "./favoritesPopup.module.css";
 import loginStyles from "./loginPopup.module.css";
 
@@ -9,14 +9,16 @@ type FavoritesPopupProps = {
   setShowFavoritesPopup: Dispatch<SetStateAction<boolean>>;
 };
 const tempResult: ResultType = {
-      storeName: "Test Store",
-      loc: { lat: parseFloat((Math.random() * 90).toFixed(3)), long: parseFloat((Math.random() * 180).toFixed(3)) },
-      distance: parseFloat((Math.random() * 14).toFixed(0)),
-      price: parseFloat((Math.random() * 20).toFixed(2)),
-    };
+  storeName: "Test Store",
+  loc: { lat: parseFloat((Math.random() * 90).toFixed(3)), long: parseFloat((Math.random() * 180).toFixed(3)) },
+  distance: parseFloat((Math.random() * 14).toFixed(0)),
+  price: parseFloat((Math.random() * 20).toFixed(2)),
+};
 
 function favoritesPopup({setShowFavoritesPopup}: FavoritesPopupProps) {
-  const handleEscape = () => {setShowFavoritesPopup(false);}
+  const handleEscape = () => {
+    setShowFavoritesPopup(false);
+  }
 
   return (
     <div className={styles.favoriteContainer}>
@@ -33,7 +35,7 @@ function favoritesPopup({setShowFavoritesPopup}: FavoritesPopupProps) {
         {<Result result={tempResult} key={7} showHeadingValue={true} />}
         {<Result result={tempResult} key={8} showHeadingValue={true} />}
       </div>
-      <div className={loginStyles.exitButton} onClick={handleEscape}></div>
+      <div className={loginStyles.exitButton + " " + styles.exitButton} onClick={handleEscape}></div>
     </div>
   );
 }
