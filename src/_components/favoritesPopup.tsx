@@ -22,6 +22,7 @@ function favoritesPopup({setShowFavoritesPopup}: FavoritesPopupProps) {
     <div className={styles.favoriteContainer}>
       <div className={styles.scrollingList}>
         {/* TODO: ADD FAVORITE BUTTON TO RESULT ITEMS */}
+          {/* MAYBE MAKE A NEW COMPONENT WHICH IS A BUTTON THAT ADDS TO THE FAVORITES THING */}
         {/* TODO: MAKE RESULTS APPEAR IN FAVORITES POPUP WHEN CLICKING FAVORITE BUTTON */}
         {<Result result={tempResult} key={0} showHeadingValue={true} />}
         {<Result result={tempResult} key={1} showHeadingValue={true} />}
