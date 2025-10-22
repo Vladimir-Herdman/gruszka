@@ -1,5 +1,5 @@
 import styles from "./result.module.css";
-import {useState} from "react"
+import {useState, useEffect} from "react"
 
 export type ResultType = {
   storeName: string;
@@ -38,6 +38,13 @@ export default function Result({result, showHeadingValue: className_}: ResultPro
       // Add to database
     }    
   }
+
+  // Code runs once upon first render, allows favorited item to show as favorited in menu
+  useEffect(() => {
+      if(result.isFavorite){
+        setFavoriteImage("./favoriteStarFilled.png");
+      }
+    }, []); // Empty array ensures this runs only once
 
   if (result.distance && result.distance === 0) {result.distance = undefined;}
 

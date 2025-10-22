@@ -14,7 +14,7 @@ const tempResult: ResultType = {
   loc: { lat: parseFloat((Math.random() * 90).toFixed(3)), long: parseFloat((Math.random() * 180).toFixed(3)) },
   distance: parseFloat((Math.random() * 14).toFixed(0)),
   price: parseFloat((Math.random() * 20).toFixed(2)),
-  isFavorite: false,
+  isFavorite: true,
 };
 
 // Had to do it this way because it wasn't happy with typing
@@ -23,8 +23,17 @@ results.pop();
 
 function populateFavorites()
 {
-  // Pull down results from database and .push(result) to the results array
+  results.push(tempResult);
+  results.push(tempResult);
+  results.push(tempResult);
+  results.push(tempResult);
+  results.push(tempResult);
+  results.push(tempResult);
+  results.push(tempResult);
+  // Pull down results from database and .push(result)
 }
+
+populateFavorites();
 
 function favoritesPopup({setShowFavoritesPopup}: FavoritesPopupProps) {
   const handleEscape = () => {
