@@ -27,6 +27,7 @@ export default function Home() {
       loc: { lat: parseFloat((Math.random() * 90).toFixed(3)), long: parseFloat((Math.random() * 180).toFixed(3)) },
       distance: parseFloat((Math.random() * 14).toFixed(0)),
       price: parseFloat((Math.random() * 20).toFixed(2)),
+      isFavorite: false,
     };
     let currentResults;//[...results.slice(), tempResult];
     if (results[results.length - 1]?.storeName === tempResult.storeName) {

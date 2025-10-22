@@ -7,12 +7,12 @@ export type ResultType = {
   price?: number;
   distance?: number;
   websiteURL?: string;
+  isFavorite: boolean;
 };
 type ResultProps = {
   result: ResultType;
   showHeadingValue: boolean;
-}
-let isFavorite:Boolean = false
+};
 
 export default function Result({result, showHeadingValue: className_}: ResultProps) {
    const [favoriteImage, setFavoriteImage] = useState("./favoriteStarUnfilled.png");
@@ -26,14 +26,16 @@ export default function Result({result, showHeadingValue: className_}: ResultPro
   function onFavoriteClicked() {
     console.log(`Added to favorites`);
 
-    if(isFavorite){
+    if(result.isFavorite){
       setFavoriteImage("./favoriteStarUnfilled.png");
-      isFavorite = false;
+      result.isFavorite = false;
+      // Remove from database
     }
     else
     {
       setFavoriteImage("./favoriteStarFilled.png");
-      isFavorite = true;
+      result.isFavorite = true;
+      // Add to database
     }    
   }
 
