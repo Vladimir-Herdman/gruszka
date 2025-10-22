@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState, Dispatch, SetStateAction } from "react";
+import { useEffect, useState, Dispatch, SetStateAction, MouseEventHandler } from "react";
 import styles from "./page.module.css";
 
 //components
 import LoginPopup from "@/_components/loginPopup";
+import { Console } from "console";
 
 export default function Home() {
   const [results, setResults] = useState<Result[]>([]);
@@ -32,9 +33,15 @@ export default function Home() {
       currentResults = [tempResult];
     }
 
-    //TODO: Insert better sorting based off customer choices with price and distance equations
-    console.log(tempResult);
+    // ------ Multiple Sorting Options  -------
+
+    // Sort by distance
+
     currentResults.sort((a, b) => (a.distance || 0) - (b.distance || 0))
+    setResults(currentResults);
+
+    // Sort by price
+    currentResults.sort((a, b) => (a.price || 0) - (b.price || 0))
     setResults(currentResults);
   };
 
@@ -119,24 +126,81 @@ type ResultContainerProps = {
   search: string;
 };
 
-function ResultContainer({results, search}: ResultContainerProps) {
-  const [showHeading, setShowHeading] = useState(false);
+function ResultContainer({ results, search }: ResultContainerProps) {
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState("");
 
-  useEffect(() => { search !== "" && setShowHeading(true);}, [search]);
+  const handleOpen: MouseEventHandler = (event) => {
+    event.preventDefault();
+    setOpen((prev) => !prev);
+  };
+
+  const handleClick: MouseEventHandler<HTMLElement> = (event) => {
+    const target = event.target as HTMLElement;
+    const id = target.id;
+    setActive(id);
+
+    setResultsForSort(id);
+  };
+
+  const setResultsForSort = (id: string) => {
+    if (results.length === 0) return;
+    //TODO: apply different sorting methods
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const dropdown = document.getElementById("dropdownWrapper");
+      if (dropdown && !dropdown.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  if (!search && results.length === 0) return null;
 
   return (
-    <>
-      <div className={styles.resultsContainer}>
-        <h2 className={styles.searchTerm + " " + (showHeading ? styles.show : "")}>Search Results for: {search}</h2>
-        {
-          results.map((result, index) => 
-            <Result result={result} key={index} className={showHeading ? styles.show : ""} />
-          )
-        }
+    <div className={styles.resultsContainer}>
+      <div className={styles.resultsContainerHeader}>
+        <h2 className={styles.searchTerm}>Search Results for: {search}</h2>
+
+        <div id="dropdownWrapper" className={styles.dropdownWrapper}>
+          <button className={styles.dropdownButton} onClick={handleOpen}>
+            Sort By ▾
+          </button>
+
+          <div className={`${styles.dropdownContent} ${open ? styles.show : ""}`}>
+            <button
+              id="distance"
+              onClick={handleClick}
+              className={`${styles.dropdownOption} ${active === "distance" ? styles.activeButton : ""}`}
+            > Distance
+              {active === "distance" && <span className={styles.activeDot}></span>}
+              
+            </button>
+
+            <button
+              id="price"
+              onClick={handleClick}
+              className={`${styles.dropdownOption} ${active === "price" ? styles.activeButton : ""}`}
+            > Price
+              {active === "price" && <span className={styles.activeDot}></span>}
+
+            </button>
+          </div>
+        </div>
       </div>
-    </>
+
+      {results.map((result, index) => (
+        <Result key={index} result={result} className={styles.show} />
+      ))}
+    </div>
   );
 }
+
 
 function Result({result, className}: ResultProps) {
 
