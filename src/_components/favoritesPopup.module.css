@@ -1,0 +1,31 @@
+.favoriteContainer{
+    --width: 350px;
+    --slide-from: calc(-1.1 * var(--width));
+
+    width: var(--width);
+    height: 500px;
+    position: fixed;
+    right: var(--slide-from);
+    top: 75;
+    background: white;
+    border: solid black 5px;
+    border-radius: 20px;
+    animation: slideIn 0.8s ease-in-out forwards;
+    z-index: 20;
+}
+
+@keyframes slideIn {
+    from { right: var(--slide-from); }
+    to { right:0; }
+}
+
+.scrollingList{
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 5px;
+}

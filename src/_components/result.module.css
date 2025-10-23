@@ -1,0 +1,60 @@
+.result {
+  padding: 10;
+  width: 315px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border-radius: 10px;
+  background-color: #f4f4f4;
+  opacity: 0;
+  transition: opacity ease 1.5s;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.resultStoreName {
+  position: absolute;
+  top: 10px;
+  left: 15px;
+}
+
+.resultDistance {
+  position: static;
+  font-size: 0.8rem;
+  margin-top: 35px;
+  margin-left: 5px;
+}
+
+.resultPrice {
+  position: absolute;
+  top: 6px;
+  right: 15px;
+  color: var(--primary-color);
+}
+
+.resultRoundButton {
+  position: absolute;
+  bottom: 10px;
+  right: 100px;
+  font-size: 0.8rem;
+  padding: 5 10 5 10;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+.resultRoundButton:hover {
+  filter: brightness(108%);
+}
+
+.show {
+  opacity: 1;
+}
+
+.favoriteImage{
+  width: 25px;
+  position: absolute;
+  top: 6px;
+  right: 90px;
+}

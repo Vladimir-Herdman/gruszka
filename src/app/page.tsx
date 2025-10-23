@@ -5,12 +5,16 @@ import styles from "./page.module.css";
 
 //components
 import LoginPopup from "@/_components/loginPopup";
+import FavoritesPopup from "@/_components/favoritesPopup";
+import Result from "@/_components/result";
+import { ResultType } from "@/_components/result";
 
 export default function Home() {
-  const [results, setResults] = useState<Result[]>([]);
+  const [results, setResults] = useState<ResultType[]>([]);
   const [search, setSearch] = useState("");
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [showFavoritesPopup, setShowFavoritesPopup] = useState(false);
 
   const handleSearch = (text: string) => {
     if (text === "") {return;}
@@ -19,11 +23,12 @@ export default function Home() {
     //TODO:
     //update once we have some API form to return data, so call API here to
     //get results array instead of just a single test result here
-    const tempResult: Result = {
+    const tempResult: ResultType = {
       storeName: text,
       loc: { lat: parseFloat((Math.random() * 90).toFixed(3)), long: parseFloat((Math.random() * 180).toFixed(3)) },
       distance: parseFloat((Math.random() * 14).toFixed(0)),
       price: parseFloat((Math.random() * 20).toFixed(2)),
+      isFavorite: false,
     };
     let currentResults;//[...results.slice(), tempResult];
     if (results[results.length - 1]?.storeName === tempResult.storeName) {
@@ -40,7 +45,7 @@ export default function Home() {
 
   return (
     <>
-      <TopBar setShowLoginPopup={setShowLoginPopup} text={loggedIn ? "Logged In" : "Login"}/>
+      <TopBar setShowLoginPopup={setShowLoginPopup} setFavoritesPopup={setShowFavoritesPopup} text={loggedIn ? "Logged In" : "Login"}/>
 
       {/* ----------SEARCH SECTION---------- */}
       <div className={styles.searchSection}>
@@ -57,15 +62,17 @@ export default function Home() {
 
       {/* ----------POPUPS SECTION---------- */}
       {showLoginPopup && <LoginPopup setShowLoginPopup={setShowLoginPopup} setLoggedIn={setLoggedIn} />} {/*TODO: make fade in out*/}
+      {showFavoritesPopup && <FavoritesPopup setShowFavoritesPopup={setShowFavoritesPopup}/>}
     </>
   );
 }
 
 type TopBarProps = {
   setShowLoginPopup: Dispatch<SetStateAction<boolean>>;
+  setFavoritesPopup: Dispatch<SetStateAction<boolean>>
   text: string;
 };
-function TopBar({setShowLoginPopup, text}: TopBarProps) {
+function TopBar({setShowLoginPopup, setFavoritesPopup, text}: TopBarProps) {
   return (
     <div className={styles.topBar}>
       <div className={styles.logoWrapper}>
@@ -74,7 +81,7 @@ function TopBar({setShowLoginPopup, text}: TopBarProps) {
       </div>
 
       <ul className={styles.topBarLinks}>
-        <li><a href="#">Favorites</a></li>
+        <li><a href="#" onClick={() => setFavoritesPopup(true)}>Favorites</a></li>
         <li><a href="#" onClick={() => setShowLoginPopup(true)}>{text}</a></li>
       </ul>
     </div>
@@ -102,20 +109,8 @@ function SearchBar({onSearchTextEntered}: SearchBarProps) {
   );
 }
 
-type Result = {
-  storeName: string;
-  loc: {lat: number, long: number};
-  price?: number;
-  distance?: number;
-  websiteURL?: string;
-};
-type ResultProps = {
-  result: Result;
-  className: string;
-}
-
 type ResultContainerProps = {
-  results: Result[];
+  results: ResultType[];
   search: string;
 };
 
@@ -130,50 +125,10 @@ function ResultContainer({results, search}: ResultContainerProps) {
         <h2 className={styles.searchTerm + " " + (showHeading ? styles.show : "")}>Search Results for: {search}</h2>
         {
           results.map((result, index) => 
-            <Result result={result} key={index} className={showHeading ? styles.show : ""} />
+            <Result result={result} key={index} showHeadingValue={showHeading} />
           )
         }
       </div>
     </>
-  );
-}
-
-function Result({result, className}: ResultProps) {
-
-  // const res = await fetch("127.0.0.1:8000/food/chicken");
-  // const data = await res.json();
-  // console.log(data.dumps(data));
-
-  //TODO: insert functionality here for Directions and OrderNow clicks such as map and opening website for store
-  function onDirectionsClicked() {
-    console.log(`Directions button clicked for storeName:${result.storeName} with price:${result.price}`);
-  }
-  function onOrderNowClicked() {
-    console.log(`Order now button clicked for storeName:${result.storeName} with price:${result.price}`);
-  }
-
-  if (result.distance && result.distance === 0) {result.distance = undefined;}
-
-  return (
-    <div className={styles.result + " " + className}>
-      <h3 className={styles.resultStoreName}>{result.storeName}</h3>
-      <p
-        className={styles.resultDistance}
-        style={result.distance ? {} : {opacity:0}}
-      >
-        {result.distance ? result.distance + " miles" : "NULL"}
-      </p>
-      {result.price && <h2 className={styles.resultPrice}>${result.price}</h2>}
-      <button //Directions
-        className={styles.resultRoundButton}
-        style={{backgroundColor:"darkgray"}}
-        onClick={onDirectionsClicked}>Directions
-      </button>
-      <button //Order Now
-        className={styles.resultRoundButton}
-        style={{right:15, backgroundColor:"var(--primary-color)"}}
-        onClick={onOrderNowClicked}>Order Now
-      </button>
-    </div>
   );
 }
