@@ -1,6 +1,10 @@
 import styles from "./result.module.css";
-import {useState, useEffect} from "react"
+import {useState, useEffect, Dispatch, SetStateAction } from "react"
 
+export type MapLocation = {
+  lat: number;
+  long: number;
+};
 export type ResultType = {
   storeName: string;
   loc: {lat: number, long: number};
@@ -12,13 +16,19 @@ export type ResultType = {
 type ResultProps = {
   result: ResultType;
   showHeadingValue: boolean;
+  setLocMethod: Dispatch<SetStateAction<MapLocation>>
+  setMapShown: Dispatch<SetStateAction<boolean>>
 };
 
-export default function Result({result, showHeadingValue: className_}: ResultProps) {
+export default function Result({result, showHeadingValue: className_, setLocMethod, setMapShown}: ResultProps) {
    const [favoriteImage, setFavoriteImage] = useState("./favoriteStarUnfilled.png");
   //TODO: insert functionality here for Directions and OrderNow clicks such as map and opening website for store
   function onDirectionsClicked() {
-    console.log(`Directions button clicked for storeName:${result.storeName} with price:${result.price}`);
+    if (result.loc && result.loc.lat && result.loc.long) {
+      const location: MapLocation = {lat: result.loc.lat, long: result.loc.long};
+      setLocMethod(location);
+      setMapShown(true);
+    }
   }
   function onOrderNowClicked() {
     console.log(`Order now button clicked for storeName:${result.storeName} with price:${result.price}`);

@@ -7,7 +7,8 @@ import styles from "./page.module.css";
 import LoginPopup from "@/_components/loginPopup";
 import FavoritesPopup from "@/_components/favoritesPopup";
 import Result from "@/_components/result";
-import { ResultType } from "@/_components/result";
+import { ResultType, MapLocation } from "@/_components/result";
+import MapContainer from "@/_components/mapPopup";
 
 export default function Home() {
   const [results, setResults] = useState<ResultType[]>([]);
@@ -15,6 +16,8 @@ export default function Home() {
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [showFavoritesPopup, setShowFavoritesPopup] = useState(false);
+  const [showMap, setShowMap] = useState(false);
+  const [mapLocation, setMapLocation] = useState<MapLocation>({lat: 0, long: 0});
 
   const handleSearch = (text: string) => {
     if (text === "") {return;}
@@ -57,7 +60,10 @@ export default function Home() {
 
       {/* ----------RESULTS SECTION---------- */}
       <div className={styles.resultsSection}>
-        <ResultContainer results={results} search={search} />
+        {!showMap
+          ? <ResultContainer results={results} search={search} setLocationMethod={setMapLocation} setMapMethod={setShowMap}/>
+          : showMap && <MapContainer setShowMapMethod={setShowMap} mapLocationObj={mapLocation} />
+        }
       </div>
 
       {/* ----------POPUPS SECTION---------- */}
@@ -112,9 +118,11 @@ function SearchBar({onSearchTextEntered}: SearchBarProps) {
 type ResultContainerProps = {
   results: ResultType[];
   search: string;
+  setLocationMethod: Dispatch<SetStateAction<MapLocation>>
+  setMapMethod: Dispatch<SetStateAction<boolean>>
 };
 
-function ResultContainer({results, search}: ResultContainerProps) {
+function ResultContainer({results, search, setLocationMethod, setMapMethod}: ResultContainerProps) {
   const [showHeading, setShowHeading] = useState(false);
 
   useEffect(() => { search !== "" && setShowHeading(true);}, [search]);
@@ -125,7 +133,7 @@ function ResultContainer({results, search}: ResultContainerProps) {
         <h2 className={styles.searchTerm + " " + (showHeading ? styles.show : "")}>Search Results for: {search}</h2>
         {
           results.map((result, index) => 
-            <Result result={result} key={index} showHeadingValue={showHeading} />
+            <Result result={result} key={index} showHeadingValue={showHeading} setLocMethod={setLocationMethod} setMapShown={setMapMethod}/>
           )
         }
       </div>
