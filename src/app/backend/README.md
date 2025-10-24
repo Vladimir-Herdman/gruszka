@@ -37,6 +37,7 @@ Now, set up the Python environment and install the necessary libraries for the b
   ```bash
   pip install fatsecret python-dotenv fastapi rauth os json uvicorn "fastapi[standard]"
   ```
+(Note: fastapi[standard] should be in quotes according to documentation, but it also seems to work without, but you should probably do what the docs say)
 
 5. **Run the backend:**
   With the environment being run,  use the following command
