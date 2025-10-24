@@ -1,0 +1,115 @@
+.nutrientProfile {
+  background: white;
+  border-radius: 8px;
+  padding: 2rem;
+  margin: 2rem 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 2rem auto;
+}
+
+.nutrientTitle {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  border-bottom: 3px solid var(--primary-color);
+  padding-bottom: 0.5rem;
+}
+
+.servingSize {
+  font-size: 1rem;
+  color: #7f8c8d;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.calorieInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 6px;
+  margin-bottom: 2rem;
+}
+
+.calorieLabel {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.calorieValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.nutrientSection {
+  margin-bottom: 2rem;
+}
+
+.sectionTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #34495e;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #ecf0f1;
+}
+
+.nutrientRow {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #ecf0f1;
+  align-items: center;
+}
+
+.nutrientRow:last-child {
+  border-bottom: none;
+}
+
+.nutrientName {
+  font-size: 1rem;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.nutrientValue {
+  font-size: 1rem;
+  color: #7f8c8d;
+  text-align: right;
+}
+
+.dailyValue {
+  font-size: 1rem;
+  color: var(--primary-color);
+  text-align: right;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .nutrientProfile {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+
+  .nutrientTitle {
+    font-size: 1.5rem;
+  }
+
+  .calorieLabel {
+    font-size: 1.2rem;
+  }
+
+  .calorieValue {
+    font-size: 1.6rem;
+  }
+
+  .nutrientRow {
+    grid-template-columns: 1.5fr 1fr 1fr;
+    font-size: 0.9rem;
+  }
+}
