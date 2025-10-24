@@ -27,7 +27,7 @@ export default function Home() {
     //update once we have some API form to return data, so call API here to
     //get results array instead of just a single test result here
     const tempResult: ResultType = {
-      storeName: text,
+      storeName: "Walmart",
       loc: { lat: parseFloat((Math.random() * 90).toFixed(3)), long: parseFloat((Math.random() * 180).toFixed(3)) },
       distance: parseFloat(((Math.random() * 14) + 1).toFixed(0)),
       price: parseFloat((Math.random() * 20).toFixed(2)),
@@ -126,11 +126,16 @@ function ResultContainer({results, search, setLocationMethod, setMapMethod}: Res
   const [showHeading, setShowHeading] = useState(false);
 
   useEffect(() => { search !== "" && setShowHeading(true);}, [search]);
+  if(!showHeading && results.length === 0) return null;
 
   return (
     <>
       <div className={styles.resultsContainer}>
-        <h2 className={styles.searchTerm + " " + (showHeading ? styles.show : "")}>Search Results for: {search}</h2>
+        <div className={styles.resultsContainerHeader}>
+          <h2 className={styles.searchTerm + " " + (showHeading ? styles.show : "")}>Search Results for: {search}</h2>
+          <button className={styles.showNutrientsButton}>Show Nutrients</button>
+        </div>
+
         {
           results.map((result, index) => 
             <Result result={result} key={index} showHeadingValue={showHeading} setLocMethod={setLocationMethod} setMapShown={setMapMethod}/>
