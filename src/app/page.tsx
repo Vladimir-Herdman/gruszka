@@ -9,6 +9,7 @@ import FavoritesPopup from "@/_components/favoritesPopup";
 import Result from "@/_components/result";
 import { ResultType, MapLocation } from "@/_components/result";
 import MapContainer from "@/_components/mapPopup";
+import NutrientProfile from "@/_components/nutrientData";
 
 export default function Home() {
   const [results, setResults] = useState<ResultType[]>([]);
@@ -18,16 +19,18 @@ export default function Home() {
   const [showFavoritesPopup, setShowFavoritesPopup] = useState(false);
   const [showMap, setShowMap] = useState(false);
   const [mapLocation, setMapLocation] = useState<MapLocation>({lat: 0, long: 0});
+  const [showNutrients, setShowNutrients] = useState(false);
 
   const handleSearch = (text: string) => {
     if (text === "") {return;}
     setSearch(text);
+    setShowNutrients(false);
 
     //TODO:
     //update once we have some API form to return data, so call API here to
     //get results array instead of just a single test result here
     const tempResult: ResultType = {
-      storeName: text,
+      storeName: "Walmart",
       loc: { lat: parseFloat((Math.random() * 90).toFixed(3)), long: parseFloat((Math.random() * 180).toFixed(3)) },
       distance: parseFloat(((Math.random() * 14) + 1).toFixed(0)),
       price: parseFloat((Math.random() * 20).toFixed(2)),
@@ -61,7 +64,14 @@ export default function Home() {
       {/* ----------RESULTS SECTION---------- */}
       <div className={styles.resultsSection}>
         {!showMap
-          ? <ResultContainer results={results} search={search} setLocationMethod={setMapLocation} setMapMethod={setShowMap}/>
+          ? <ResultContainer 
+              results={results} 
+              search={search} 
+              setLocationMethod={setMapLocation} 
+              setMapMethod={setShowMap}
+              showNutrients={showNutrients}
+              setShowNutrients={setShowNutrients}
+            />
           : showMap && <MapContainer setShowMapMethod={setShowMap} mapLocationObj={mapLocation} />
         }
       </div>
@@ -120,20 +130,35 @@ type ResultContainerProps = {
   search: string;
   setLocationMethod: Dispatch<SetStateAction<MapLocation>>
   setMapMethod: Dispatch<SetStateAction<boolean>>
+  showNutrients: boolean;
+  setShowNutrients: Dispatch<SetStateAction<boolean>>;
 };
 
-function ResultContainer({results, search, setLocationMethod, setMapMethod}: ResultContainerProps) {
+function ResultContainer({results, search, setLocationMethod, setMapMethod, showNutrients, setShowNutrients}: ResultContainerProps) {
   const [showHeading, setShowHeading] = useState(false);
 
   useEffect(() => { search !== "" && setShowHeading(true);}, [search]);
+  if(!showHeading && results.length === 0) return null;
 
   return (
     <>
       <div className={styles.resultsContainer}>
-        <h2 className={styles.searchTerm + " " + (showHeading ? styles.show : "")}>Search Results for: {search}</h2>
+        <div className={styles.resultsContainerHeader}>
+          <h2 className={styles.searchTerm + " " + (showHeading ? styles.show : "")}>Search Results for: {search}</h2>
+          <button className={styles.showNutrientsButton} onClick={() => setShowNutrients(!showNutrients)}>
+            {showNutrients ? "Back" : "Show Nutrients"}
+          </button>
+        </div>
+
         {
-          results.map((result, index) => 
-            <Result result={result} key={index} showHeadingValue={showHeading} setLocMethod={setLocationMethod} setMapShown={setMapMethod}/>
+          showNutrients ? (
+            //TODO: pass all the information into the nutrient profile I think.
+            // or maybe we can grab it in nutrientData.tsx idk
+            <NutrientProfile search={search} />
+          ) : (
+            results.map((result, index) => 
+              <Result result={result} key={index} showHeadingValue={showHeading} setLocMethod={setLocationMethod} setMapShown={setMapMethod}/>
+            )
           )
         }
       </div>
