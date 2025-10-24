@@ -20,6 +20,7 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [nutritionData, setNutritionData] = useState<FoodItemType>({name:"", data:"", price:0});
 
   const handleSearch = (text: string) => {
     if (text === "") {return;}
@@ -55,13 +56,14 @@ export default function Home() {
       <div className={styles.searchSection}>
         <div className={styles.backgroundImage}></div>
         <div className={styles.searchContainer}>
+          <button onClick={() => console.log("nutrition from use state: ",nutritionData)}> click me </button>
             <SearchBar onSearchTextEntered={handleSearch} />
         </div>
       </div>
 
       {/* ----------RESULTS SECTION---------- */}
       <div className={styles.resultsSection}>
-        <ResultContainer results={results} search={search} />
+        <ResultContainer results={results} search={search} setFoodDataMethod={setNutritionData}/>
       </div>
 
       {/* ----------POPUPS SECTION---------- */}
@@ -121,14 +123,22 @@ type Result = {
 type ResultProps = {
   result: Result;
   className: string;
+  setFoodDataMethodLower?: Dispatch<SetStateAction<FoodItemType>>;
 }
+
+type FoodItemType = {
+  name: string;
+  data: "";
+  price: number;
+};
 
 type ResultContainerProps = {
   results: Result[];
   search: string;
+  setFoodDataMethod?: Dispatch<SetStateAction<FoodItemType>>
 };
 
-function ResultContainer({results, search}: ResultContainerProps) {
+function ResultContainer({results, search, setFoodDataMethod}: ResultContainerProps) {
   const [showHeading, setShowHeading] = useState(false);
 
   useEffect(() => { search !== "" && setShowHeading(true);}, [search]);
@@ -139,46 +149,58 @@ function ResultContainer({results, search}: ResultContainerProps) {
         <h2 className={styles.searchTerm + " " + (showHeading ? styles.show : "")}>Search Results for: {search}</h2>
         {
           results.map((result, index) => 
-            <Result result={result} key={index} className={showHeading ? styles.show : ""} />
+            <Result result={result} key={index} className={showHeading ? styles.show : ""} setFoodDataMethodLower={setFoodDataMethod} />
           )
         }
       </div>
     </>
   );
 }
-function Result({result, className}: ResultProps) {
+function Result({result, className, setFoodDataMethodLower}: ResultProps) {
+  const [fetchCalled, setFetchCalled] = useState(false);
 
-  console.log("run");
+  if (!fetchCalled) {
+    setFetchCalled(true);
+    console.log("run");
 
-  const help = async () => {
-    console.log("Help");
-    try{
-      const res = await fetch("http://127.0.0.1:8000/food/chicken");
-      const data = await res.json();
-      console.log(data);  
-      return await data;
-    } catch(e){
-      return [];
-    }
-  };
-let food;
+    const help = async () => {
+      console.log("Help");
+      try{
+        const res = await fetch("http://127.0.0.1:8000/food/chicken");
+        const data = await res.json();
+        console.log(data);  
+        return await data;
+      } catch(e){
+        return [];
+      }
+    };
+    let food;
 
-  let data = help().then((data) => {
-    if(data === 404){
-      console.log("Error");
-      return;
-    }
-    console.log(data[0].food_description);
-    food = data[0].food_description;
-    let name = data[0].food_name;
-    let foo = data[0].food_description;
-    foodItem.push({name:name, data: foo, price: 0});
-    console.log(foodItem);
-  });
-  // let food = data[0].food_description;
-  // console.log(food);
-  // data;
-  // console.log(data.food_description);
+    let data = help().then((data) => {
+      if(data === 404){
+        console.log("Error");
+        return;
+      }
+      console.log(data[0].food_description);
+      food = data[0].food_description;
+      let name = data[0].food_name;
+      let foo = data[0].food_description;
+      foodItem.push({name:name, data: foo, price: 0});
+      console.log(foodItem);
+
+      if (setFoodDataMethodLower) {
+        const foodDataObj: FoodItemType = {name:data[0].name, data:data[0].food_description, price:0};
+        //console.log("food data obj:",foodDataObj);
+        setFoodDataMethodLower(foodDataObj); //update with actual search info
+      }
+    });
+
+
+    // let food = data[0].food_description;
+    // console.log(food);
+    // data;
+    // console.log(data.food_description);
+  }
 
   //TODO: insert functionality here for Directions and OrderNow clicks such as map and opening website for store
   function onDirectionsClicked() {
