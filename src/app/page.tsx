@@ -13,6 +13,7 @@ export default function Home() {
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
 
+
   const handleSearch = (text: string) => {
     if (text === "") {return;}
     setSearch(text);
@@ -33,15 +34,9 @@ export default function Home() {
       currentResults = [tempResult];
     }
 
-    // ------ Multiple Sorting Options  -------
-
-    // Sort by distance
-
-    currentResults.sort((a, b) => (a.distance || 0) - (b.distance || 0))
-    setResults(currentResults);
-
-    // Sort by price
-    currentResults.sort((a, b) => (a.price || 0) - (b.price || 0))
+  
+    //default sort by distance
+    currentResults.sort((a, b) => (a.distance || 0) - (b.distance || 0));
     setResults(currentResults);
   };
 
@@ -128,7 +123,8 @@ type ResultContainerProps = {
 
 function ResultContainer({ results, search }: ResultContainerProps) {
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState("");
+  const [sortingMethod, setActive] = useState("Distance");
+  const [sortedResults, setSortedResults] = useState<Result[]>([]);
 
   const handleOpen: MouseEventHandler = (event) => {
     event.preventDefault();
@@ -139,14 +135,19 @@ function ResultContainer({ results, search }: ResultContainerProps) {
     const target = event.target as HTMLElement;
     const id = target.id;
     setActive(id);
-
-    setResultsForSort(id);
   };
 
-  const setResultsForSort = (id: string) => {
+  useEffect(() => {
     if (results.length === 0) return;
-    //TODO: apply different sorting methods
-  };
+
+    const sorted = [...results];
+    if (sortingMethod === "Distance") {
+      sorted.sort((a, b) => (a.distance || 0) - (b.distance || 0));
+    } else if (sortingMethod === "Price") {
+      sorted.sort((a, b) => (a.price || 0) - (b.price || 0));
+    }
+    setSortedResults(sorted);
+  }, [results, sortingMethod]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -174,27 +175,25 @@ function ResultContainer({ results, search }: ResultContainerProps) {
 
           <div className={`${styles.dropdownContent} ${open ? styles.show : ""}`}>
             <button
-              id="distance"
+              id="Distance"
               onClick={handleClick}
-              className={`${styles.dropdownOption} ${active === "distance" ? styles.activeButton : ""}`}
-            > Distance
-              {active === "distance" && <span className={styles.activeDot}></span>}
-              
+              className={`${styles.dropdownOption} ${sortingMethod === "Distance" ? styles.activeButton : ""}`}
+            >Distance
+              {sortingMethod === "Distance" && <span className={styles.activeDot}></span>}
             </button>
 
             <button
-              id="price"
+              id="Price"
               onClick={handleClick}
-              className={`${styles.dropdownOption} ${active === "price" ? styles.activeButton : ""}`}
-            > Price
-              {active === "price" && <span className={styles.activeDot}></span>}
-
+              className={`${styles.dropdownOption} ${sortingMethod === "Price" ? styles.activeButton : ""}`}
+            >Price
+              {sortingMethod === "Price" && <span className={styles.activeDot}></span>}
             </button>
           </div>
         </div>
       </div>
 
-      {results.map((result, index) => (
+      {sortedResults.map((result, index) => (
         <Result key={index} result={result} className={styles.show} />
       ))}
     </div>
@@ -241,3 +240,4 @@ function Result({result, className}: ResultProps) {
     </div>
   );
 }
+
