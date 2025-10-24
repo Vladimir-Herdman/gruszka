@@ -89,27 +89,3 @@
   text-align: right;
   font-weight: 600;
 }
-
-@media (max-width: 768px) {
-  .nutrientProfile {
-    padding: 1.5rem;
-    margin: 1rem;
-  }
-
-  .nutrientTitle {
-    font-size: 1.5rem;
-  }
-
-  .calorieLabel {
-    font-size: 1.2rem;
-  }
-
-  .calorieValue {
-    font-size: 1.6rem;
-  }
-
-  .nutrientRow {
-    grid-template-columns: 1.5fr 1fr 1fr;
-    font-size: 0.9rem;
-  }
-}

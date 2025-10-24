@@ -152,6 +152,8 @@ function ResultContainer({results, search, setLocationMethod, setMapMethod, show
 
         {
           showNutrients ? (
+            //TODO: pass all the information into the nutrient profile I think.
+            // or maybe we can grab it in nutrientData.tsx idk
             <NutrientProfile search={search} />
           ) : (
             results.map((result, index) => 
