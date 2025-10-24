@@ -22,9 +22,9 @@ type ResultProps = {
 export default function Result({result, showHeadingValue: className_, setLocMethod, setMapShown}: ResultProps) {
   
   function onDirectionsClicked() {
-    if (result.loc && result.loc.lat && result.loc.long && setMapShown && setLocMethod) {
+    if (result.loc && result.loc.lat && result.loc.long && setMapShown) {
       const location: MapLocation = {lat: result.loc.lat, long: result.loc.long};
-      setLocMethod(location);
+      setLocMethod && setLocMethod(location);
       setMapShown(true);
     }
   }

@@ -13,13 +13,60 @@ import NutrientProfile from "@/_components/nutrientData";
 
 export default function Home() {
   const [results, setResults] = useState<ResultType[]>([]);
+  const [googleRequested, setGoogleRequested] = useState(false);
   const [search, setSearch] = useState("");
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [showFavoritesPopup, setShowFavoritesPopup] = useState(false);
   const [showMap, setShowMap] = useState(false);
   const [mapLocation, setMapLocation] = useState<MapLocation>({lat: 0, long: 0});
+  const [currentResultLocation, setCurrentResultLocation] = useState<MapLocation>({lat: 0, long: 0});
   const [showNutrients, setShowNutrients] = useState(false);
+
+  if (mapLocation.lat === 0 && mapLocation.long === 0 && typeof navigator !== "undefined" && "geolocation" in navigator) {
+    const success = (pos: GeolocationPosition) => {
+      const geo_lat = pos.coords.latitude;
+      const geo_long = pos.coords.longitude;
+      setMapLocation({lat:geo_lat, long:geo_long});
+    };
+    const error = () => { console.error("Location not given, can't geolocate stores nearby"); };
+    navigator.geolocation.getCurrentPosition(success, error);
+  }
+
+  if (!googleRequested && mapLocation.lat !== 0 && mapLocation.long !== 0 ) {
+    const getStores = async () => {
+      const ml_lat = mapLocation.lat;
+      const ml_long = mapLocation.long;
+
+      const res = await fetch('/api/places', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lat: ml_lat, lng: ml_long }),
+      });
+
+      const data = await res.json();
+      console.log("data:", data)
+
+      //for (let i = 0; i < places_len; i++) {
+        //const store = places[i];
+        //console.log("store name:", store, ",store location:", store.geometry.location);
+      //}
+    };
+    getStores();
+    //const radius = 16093; // 10 miles
+    //const apiKey = "AIzaSyBRRHhUKbDMiqmr8mtrO1kGL8S0QNtxS2k&q";
+    //fetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${long}&radius=${radius}&type=grocery_or_supermarket&key=${apiKey}`)
+      //.then(res => res.json())
+      //.then(data => {
+        //const data_len = data.results.length;
+        //for (let i = 0; i < data_len; i++) {
+          //const store = data[i];
+          //console.log("store name:", store, ",store location:", store.geometry.location);
+        //}
+      //});
+
+    setGoogleRequested(true);
+  }
 
   const handleSearch = (text: string) => {
     if (text === "") {return;}
@@ -63,16 +110,17 @@ export default function Home() {
 
       {/* ----------RESULTS SECTION---------- */}
       <div className={styles.resultsSection}>
+        <button onClick={() => console.log(mapLocation)}>press here</button>
         {!showMap
           ? <ResultContainer 
               results={results} 
               search={search} 
-              setLocationMethod={setMapLocation} 
               setMapMethod={setShowMap}
+              setLocationMethod={setCurrentResultLocation}
               showNutrients={showNutrients}
               setShowNutrients={setShowNutrients}
             />
-          : showMap && <MapContainer setShowMapMethod={setShowMap} mapLocationObj={mapLocation} />
+          : showMap && <MapContainer setShowMapMethod={setShowMap} mapLocationObj={currentResultLocation} />
         }
       </div>
 
@@ -127,7 +175,7 @@ function SearchBar({onSearchTextEntered}: SearchBarProps) {
 type ResultContainerProps = {
   results: ResultType[];
   search: string;
-  setLocationMethod: Dispatch<SetStateAction<MapLocation>>
+  setLocationMethod?: Dispatch<SetStateAction<MapLocation>>
   setMapMethod: Dispatch<SetStateAction<boolean>>
   showNutrients: boolean;
   setShowNutrients: Dispatch<SetStateAction<boolean>>;
