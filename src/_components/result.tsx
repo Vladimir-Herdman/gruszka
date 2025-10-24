@@ -62,7 +62,6 @@ export default function Result({result, showHeadingValue: className_, setLocMeth
     <div className={styles.result + " " + (className_ ? styles.show : "")}>
       <h3 className={styles.resultStoreName}>{result.storeName}</h3>
       
-      {/* Left side - Buttons under store name */}
       <div className={styles.buttonContainer}>
         <button
           className={styles.resultRoundButton}
@@ -76,11 +75,9 @@ export default function Result({result, showHeadingValue: className_, setLocMeth
         </button>
       </div>
 
-      {/* Right side - Distance */}
       {result.distance && (
         <h2 className={styles.resultDistance}>{result.distance} {result.distance < 2 ? "mile" : "miles"}</h2>
       )}
-      {/* Favorites Button - Top Right */}
       <img src={favoriteImage} className={styles.favoriteImage} onClick={onFavoriteClicked}/>
     </div>
   );
