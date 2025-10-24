@@ -8,9 +8,8 @@ export type MapLocation = {
 export type ResultType = {
   storeName: string;
   loc: {lat: number, long: number};
-  price?: number;
+  price: number;
   distance?: number;
-  websiteURL?: string;
   isFavorite: boolean;
 };
 type ResultProps = {
@@ -22,7 +21,7 @@ type ResultProps = {
 
 export default function Result({result, showHeadingValue: className_, setLocMethod, setMapShown}: ResultProps) {
    const [favoriteImage, setFavoriteImage] = useState("./favoriteStarUnfilled.png");
-  //TODO: insert functionality here for Directions and OrderNow clicks such as map and opening website for store
+  
   function onDirectionsClicked() {
     if (result.loc && result.loc.lat && result.loc.long) {
       const location: MapLocation = {lat: result.loc.lat, long: result.loc.long};
@@ -30,9 +29,11 @@ export default function Result({result, showHeadingValue: className_, setLocMeth
       setMapShown(true);
     }
   }
+  
   function onOrderNowClicked() {
     console.log(`Order now button clicked for storeName:${result.storeName} with price:${result.price}`);
   }
+  
   function onFavoriteClicked() {
     console.log(`Added to favorites`);
 
@@ -49,40 +50,38 @@ export default function Result({result, showHeadingValue: className_, setLocMeth
     }    
   }
 
-  // Code runs once upon first render, allows favorited item to show as favorited in menu
   useEffect(() => {
       if(result.isFavorite){
         setFavoriteImage("./favoriteStarFilled.png");
       }
-    }, []); // Empty array ensures this runs only once
+    }, []);
 
   if (result.distance && result.distance === 0) {result.distance = undefined;}
 
   return (
     <div className={styles.result + " " + (className_ ? styles.show : "")}>
       <h3 className={styles.resultStoreName}>{result.storeName}</h3>
-      <p
-        className={styles.resultDistance}
-        style={result.distance ? {} : {opacity:0}}
-      >
-        {result.distance ? result.distance + " miles" : "NULL"}
-      </p>
-
-      {/* Favorites Button */}
-      <img src={favoriteImage} className={styles.favoriteImage}  onClick={onFavoriteClicked}/>
       
-      {result.price && <h2 className={styles.resultPrice}>${result.price}</h2>}
+      {/* Left side - Buttons under store name */}
+      <div className={styles.buttonContainer}>
+        <button
+          className={styles.resultRoundButton}
+          style={{backgroundColor:"darkgray"}}
+          onClick={onDirectionsClicked}>Directions
+        </button>
+        <button
+          className={styles.resultRoundButton}
+          style={{backgroundColor:"var(--primary-color)"}}
+          onClick={onOrderNowClicked}>Order Now
+        </button>
+      </div>
 
-      <button //Directions
-        className={styles.resultRoundButton}
-        style={{backgroundColor:"darkgray"}}
-        onClick={onDirectionsClicked}>Directions
-      </button>
-      <button //Order Now
-        className={styles.resultRoundButton}
-        style={{right:15, backgroundColor:"var(--primary-color)"}}
-        onClick={onOrderNowClicked}>Order Now
-      </button>
+      {/* Right side - Distance */}
+      {result.distance && (
+        <h2 className={styles.resultDistance}>{result.distance} {result.distance < 2 ? "mile" : "miles"}</h2>
+      )}
+      {/* Favorites Button - Top Right */}
+      <img src={favoriteImage} className={styles.favoriteImage} onClick={onFavoriteClicked}/>
     </div>
   );
 }

@@ -29,7 +29,7 @@ export default function Home() {
     const tempResult: ResultType = {
       storeName: text,
       loc: { lat: parseFloat((Math.random() * 90).toFixed(3)), long: parseFloat((Math.random() * 180).toFixed(3)) },
-      distance: parseFloat((Math.random() * 14).toFixed(0)),
+      distance: parseFloat(((Math.random() * 14) + 1).toFixed(0)),
       price: parseFloat((Math.random() * 20).toFixed(2)),
       isFavorite: false,
     };
