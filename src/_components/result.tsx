@@ -16,15 +16,15 @@ export type ResultType = {
 type ResultProps = {
   result: ResultType;
   showHeadingValue: boolean;
-  setLocMethod: Dispatch<SetStateAction<MapLocation>>
-  setMapShown: Dispatch<SetStateAction<boolean>>
+  setLocMethod?: Dispatch<SetStateAction<MapLocation>>
+  setMapShown?: Dispatch<SetStateAction<boolean>>
 };
 
 export default function Result({result, showHeadingValue: className_, setLocMethod, setMapShown}: ResultProps) {
    const [favoriteImage, setFavoriteImage] = useState("./favoriteStarUnfilled.png");
   //TODO: insert functionality here for Directions and OrderNow clicks such as map and opening website for store
   function onDirectionsClicked() {
-    if (result.loc && result.loc.lat && result.loc.long) {
+    if (result.loc && result.loc.lat && result.loc.long && setMapShown && setLocMethod) {
       const location: MapLocation = {lat: result.loc.lat, long: result.loc.long};
       setLocMethod(location);
       setMapShown(true);
