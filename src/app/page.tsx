@@ -97,7 +97,6 @@ function TopBar({setShowLoginPopup, setFavoritesPopup, text}: TopBarProps) {
       </div>
 
       <ul className={styles.topBarLinks}>
-        <li><a href="#" onClick={() => setFavoritesPopup(true)}>Favorites</a></li>
         <li><a href="#" onClick={() => setShowLoginPopup(true)}>{text}</a></li>
       </ul>
     </div>

@@ -20,7 +20,6 @@ type ResultProps = {
 };
 
 export default function Result({result, showHeadingValue: className_, setLocMethod, setMapShown}: ResultProps) {
-   const [favoriteImage, setFavoriteImage] = useState("./favoriteStarUnfilled.png");
   
   function onDirectionsClicked() {
     if (result.loc && result.loc.lat && result.loc.long && setMapShown && setLocMethod) {
@@ -34,27 +33,8 @@ export default function Result({result, showHeadingValue: className_, setLocMeth
     console.log(`Order now button clicked for storeName:${result.storeName} with price:${result.price}`);
   }
   
-  function onFavoriteClicked() {
-    console.log(`Added to favorites`);
+  
 
-    if(result.isFavorite){
-      setFavoriteImage("./favoriteStarUnfilled.png");
-      result.isFavorite = false;
-      // Remove from database
-    }
-    else
-    {
-      setFavoriteImage("./favoriteStarFilled.png");
-      result.isFavorite = true;
-      // Add to database
-    }    
-  }
-
-  useEffect(() => {
-      if(result.isFavorite){
-        setFavoriteImage("./favoriteStarFilled.png");
-      }
-    }, []);
 
   if (result.distance && result.distance === 0) {result.distance = undefined;}
 
@@ -78,7 +58,6 @@ export default function Result({result, showHeadingValue: className_, setLocMeth
       {result.distance && (
         <h2 className={styles.resultDistance}>{result.distance} {result.distance < 2 ? "mile" : "miles"}</h2>
       )}
-      <img src={favoriteImage} className={styles.favoriteImage} onClick={onFavoriteClicked}/>
     </div>
   );
 }
