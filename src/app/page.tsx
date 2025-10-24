@@ -164,6 +164,10 @@ function Result({result, className}: ResultProps) {
 let food;
 
   let data = help().then((data) => {
+    if(data === 404){
+      console.log("Error");
+      return;
+    }
     console.log(data[0].food_description);
     food = data[0].food_description;
     let name = data[0].food_name;

@@ -26,6 +26,9 @@ app.add_middleware(
 
 @app.get("/food/{query}")
 async def search(query: str):
-    foods = fs.foods_search(query)
-
+    try:
+        foods = fs.foods_search(query)
+    except KeyError:
+        print("Error")
+        foods = 404
     return foods
