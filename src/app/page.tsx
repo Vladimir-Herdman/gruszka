@@ -23,6 +23,12 @@ export default function Home() {
   const [currentResultLocation, setCurrentResultLocation] = useState<MapLocation>({lat: 0, long: 0});
   const [showNutrients, setShowNutrients] = useState(false);
 
+  const haversine = (lat: number, long: number) => {
+    const lat_diff = Math.abs(lat) - Math.abs(mapLocation.lat);
+    const long_diff = Math.abs(long) - Math.abs(mapLocation.long);
+    return 0.621371*(111.319*Math.sqrt(Math.pow(lat_diff, 2) + Math.pow((long_diff)*Math.cos((lat+mapLocation.lat)*0.00872664626), 2)));
+  };
+
   if (mapLocation.lat === 0 && mapLocation.long === 0 && typeof navigator !== "undefined" && "geolocation" in navigator) {
     const success = (pos: GeolocationPosition) => {
       const geo_lat = pos.coords.latitude;
@@ -41,30 +47,26 @@ export default function Home() {
       const res = await fetch('/api/places', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lat: ml_lat, lng: ml_long }),
+        body: JSON.stringify({ lat: ml_lat, long: ml_long }),
       });
 
       const data = await res.json();
-      console.log("data:", data)
+      const places = data.places;
+      console.log(places);
 
-      //for (let i = 0; i < places_len; i++) {
-        //const store = places[i];
-        //console.log("store name:", store, ",store location:", store.geometry.location);
-      //}
+      const newResults: ResultType[] = places.map((store: any) => ({
+        storeName: store.displayName.text,
+        loc: { lat: store.location.latitude, long: store.location.longitude },
+        distance: Math.round(haversine(store.location.latitude, store.location.longitude)*100)/100,
+        price: 0,
+        isFavorite: false,
+      }));
+
+      newResults.sort((a, b) => (a.distance || 0) - (b.distance || 0))
+      setResults(newResults);
     };
     getStores();
-    //const radius = 16093; // 10 miles
-    //const apiKey = "AIzaSyBRRHhUKbDMiqmr8mtrO1kGL8S0QNtxS2k&q";
-    //fetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${long}&radius=${radius}&type=grocery_or_supermarket&key=${apiKey}`)
-      //.then(res => res.json())
-      //.then(data => {
-        //const data_len = data.results.length;
-        //for (let i = 0; i < data_len; i++) {
-          //const store = data[i];
-          //console.log("store name:", store, ",store location:", store.geometry.location);
-        //}
-      //});
-
+    setSearch(" ");
     setGoogleRequested(true);
   }
 
@@ -76,24 +78,6 @@ export default function Home() {
     //TODO:
     //update once we have some API form to return data, so call API here to
     //get results array instead of just a single test result here
-    const tempResult: ResultType = {
-      storeName: "Walmart",
-      loc: { lat: parseFloat((Math.random() * 90).toFixed(3)), long: parseFloat((Math.random() * 180).toFixed(3)) },
-      distance: parseFloat(((Math.random() * 14) + 1).toFixed(0)),
-      price: parseFloat((Math.random() * 20).toFixed(2)),
-      isFavorite: false,
-    };
-    let currentResults;//[...results.slice(), tempResult];
-    if (results[results.length - 1]?.storeName === tempResult.storeName) {
-      currentResults = [...results.slice(), tempResult];
-    } else {
-      currentResults = [tempResult];
-    }
-
-    //TODO: Insert better sorting based off customer choices with price and distance equations
-    console.log(tempResult);
-    currentResults.sort((a, b) => (a.distance || 0) - (b.distance || 0))
-    setResults(currentResults);
   };
 
   return (
@@ -110,7 +94,6 @@ export default function Home() {
 
       {/* ----------RESULTS SECTION---------- */}
       <div className={styles.resultsSection}>
-        <button onClick={() => console.log(mapLocation)}>press here</button>
         {!showMap
           ? <ResultContainer 
               results={results} 
@@ -191,7 +174,7 @@ function ResultContainer({results, search, setLocationMethod, setMapMethod, show
     <>
       <div className={styles.resultsContainer}>
         <div className={styles.resultsContainerHeader}>
-          <h2 className={styles.searchTerm + " " + (showHeading ? styles.show : "")}>Search Results for: {search}</h2>
+          <h2 className={styles.searchTerm + " " + (showHeading ? styles.show : "")}>Nutritional Results for: {search}</h2>
           <button className={styles.showNutrientsButton} onClick={() => setShowNutrients(!showNutrients)}>
             {showNutrients ? "Back" : "Show Nutrients"}
           </button>
